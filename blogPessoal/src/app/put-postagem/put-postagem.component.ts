@@ -4,6 +4,8 @@ import { Tema } from '../model/Tema';
 import { TemaService } from '../service/tema.service';
 import { PostagemService } from '../service/postagem.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { AlertasService } from '../service/alertas.service';
+import { AttachSession } from 'protractor/built/driverProviders';
 
 @Component({
   selector: 'app-put-postagem',
@@ -23,7 +25,8 @@ export class PutPostagemComponent implements OnInit {
     private temaService: TemaService,
     private postagemService: PostagemService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private alert: AlertasService
   ) { }
 
   ngOnInit() {
@@ -49,10 +52,10 @@ export class PutPostagemComponent implements OnInit {
     this.postagemService.putPostagem(this.postagem).subscribe((resp: Postagem) => {
       this.postagem = resp
       this.router.navigate(['/feed'])
-      alert('Postagem alterada com sucesso!')
+      this.alert.showAlertSuccess('Postagem alterada com sucesso!')
     }, err => {
       if (err.status == '500'){
-        alert('Preencha todos os campos antes de enviar!')
+        this.alert.showAlertDanger('Preencha todos os campos antes de enviar!')
       }
     })
   }
